@@ -14,8 +14,8 @@ class PostResource extends AbstractJsonResource
         return [
             'id'=>$this->id,
             'title'=>$this->title,
-            'user_id'=>$this->user_id,
-            'content_id'=>$this->content_id,
+            'user'=>$this->user,
+            'contents'=>$this->contents,
             'comments'=>$this->comments,
             'likes'=>$this->likes,
         ];

@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->timestamps();
+        Schema::table('contents', function (Blueprint $table) {
+            $table->string('image')->nullable()->after('status');
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('posts');
+        Schema::table('contents', function (Blueprint $table) {
+            $table->string('image')->nullable();
+        });
     }
 };
