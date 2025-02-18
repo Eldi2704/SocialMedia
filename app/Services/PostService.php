@@ -13,4 +13,5 @@ class PostService extends BaseService {
         $this->postRepository = $postRepository;
     }
 
+
 }

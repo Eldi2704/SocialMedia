@@ -23,8 +23,6 @@ class PostRequest extends FormRequest
     {
         return [
             'title'=>'required',
-            'content_id'=>'required',
-            'user_id'=>'required|unique:posts',
         ];
     }
 }

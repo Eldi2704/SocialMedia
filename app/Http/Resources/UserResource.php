@@ -15,7 +15,7 @@ class UserResource extends AbstractJsonResource
             'id'=>$this->id,
             'firstname'=>$this->firstname,
             'lastname'=>$this->lastname,
-            'email'=>$this->email
+            'email'=>$this->email,
         ];
     }
 }

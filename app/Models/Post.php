@@ -11,7 +11,7 @@ class Post extends Model
     ];
 
     public function contents() {
-        return $this->hasMany(Content::class);
+        return $this->hasOne(Content::class);
     }
 
     public function user() {
