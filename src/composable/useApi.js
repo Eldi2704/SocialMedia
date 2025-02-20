@@ -1,15 +1,15 @@
 import axios from 'axios'
-// import {useUserStore} from "../stores/userSession";
+import {useUserStore} from "../stores/userSession";
 import router from "@/router";
+import {useNotification} from "@kyvg/vue3-notification";
 
+const { notify }  = useNotification()
 const backend_url = import.meta.env.VITE_BACKEND_URL
-let lastRequestTime = null
 
 export const api = axios.create({
     withCredentials: false,
     baseURL: backend_url,
     headers: {
-        // 'Authorization': 'Bearer ' + localStorage.getItem('token'),
         "Allow-Control-Allow-Origin": "*",
         'X-Requested-With': 'XMLHttpRequest',
         'Accept': '*/*',
@@ -17,65 +17,71 @@ export const api = axios.create({
     }
 })
 
-// api.interceptors.request.use((config) => {
-//     const userSession = useUserStore()
-//
-//     if (userSession.token) {
-//         config.headers = {
-//             ...config.headers,
-//             Authorization: `Bearer ${userSession.token}`,
-//         }
-//     }
-//     return config
-// })
+api.interceptors.request.use((config) => {
+    const userSession = useUserStore()
 
-// api.interceptors.response.use(undefined, function (res) {
-//
-//     if (res.response.data.missing_setting_company) {
-//         router.push({name: 'companies-settings-create'})
-//         if (!lastRequestTime || (Date.now() - lastRequestTime) > 5000) {
-//             alert(res.response.data.message)
-//         }
-//         lastRequestTime = Date.now();
-//     }
-//
-//     if (res.response.data.policy_not_agreed) {
-//         router.push({name: 'agree-policies'})
-//         if (!lastRequestTime || (Date.now() - lastRequestTime) > 5000) {
-//             alert(res.response.data.message)
-//         }
-//         lastRequestTime = Date.now();
-//     }
-//
-//     switch (res.response.status) {
-//         case 401:
-//             router.replace({name: 'login'})
-//             // window.location.href = "/login";
-//             break;
-//         case 419:
-//             router.push({name: 'login'})
-//             //window.location.href = "/login";
-//             break;
-//         case 400:
-//             alert(res.response.data.message)
-//             break;
-//         case 403:
-//             alert('Forbidden')
-//             //window.location.href = "/403";
-//             break;
-//         case 422:
-//             let text = '';
-//             for (const value of Object.values(res.response.data.errors).concat()) {
-//                 text += '\n ' + value;
-//             }
-//             alert(text)
-//             break;
-//         case 500:
-//             alert('Server Error')
-//             //window.location.href = "/500";
-//             break;
-//     }
-// });
+    if (userSession.token) {
+        config.headers = {
+            ...config.headers,
+            Authorization: `Bearer ${userSession.token}`,
+        }
+    }
+    return config
+})
+
+api.interceptors.response.use(undefined, function (res) {
+    switch (res.response.status) {
+        case 401:
+            router.push({name: 'login'})
+            notify({
+                title: 'Unauthenticated',
+                type: "error",
+                text: 'You are not logged in',
+            });
+            break;
+        case 419:
+            router.push({name: 'login'})
+            notify({
+                title: 'Unauthenticated',
+                type: "error",
+                text: 'You are not logged in',
+            });
+            break;
+        case 400:
+            notify({
+                title: '',
+                type: "error",
+                text: res.response.data.message,
+            });
+            break;
+        case 403:
+            alert('Forbidden')
+            notify({
+                title: 'Forbidden',
+                type: "error",
+                text: res.response.data.message,
+            });
+            break;
+        case 422:
+            let text = '';
+            for (const value of Object.values(res.response.data.errors).concat()) {
+                text += '\n ' + value;
+            }
+            notify({
+                title: "",
+                type: "error",
+                text: text,
+            });
+            break;
+        case 500:
+            notify({
+                title: "500 error",
+                type: "error",
+                text: res.message,
+            });
+            break;
+    }
+});
 
 export async function get(path, data) {
     return await api.get(path, data);

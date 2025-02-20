@@ -9,13 +9,16 @@ onMounted(async () => {
   try {
     const data = await getPosts();
     console.log("Post data:", data.result.data);
+    if (!Array.isArray(data.result.data)) {
+      console.error("Data is not an array:", data.result.data);
+    }
+
     posts.value = data.result.data;
   } catch (error) {
     console.error("Error fetching posts:", error);
   }
 });
 
-import { ref } from "vue";
 
 const showModal = ref(false);
 
@@ -71,14 +74,14 @@ const handlePostCreated = () => {
         />
 
         <div class="mt-3 flex flex-col">
-          <div v-for="post in posts" :key="post.id">
+          <div v-for="post in posts || []" :key="post.id">
             <div class="bg-white mt-3">
-              {{ post.user.firstname }} {{ post.user.lastname }}
+              {{ post.user?.firstname }} {{ post.user?.lastname }}
               <br>
               {{ post.title }}
               <br>
-              {{ post.content.status }}
-              <img class="border rounded-t-lg shadow-lg" :src="post.content.image" alt="Post Image">
+              {{ post.content?.status }}
+              <img class="border rounded-t-lg shadow-lg w-full h-auto block" :src="post.content?.image" alt="Post Image">
             </div>
 
             <div class="bg-white border shadow p-5 text-xl text-gray-700 font-semibold">

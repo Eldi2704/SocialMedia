@@ -1,22 +1,8 @@
 import {destroy, get, patch, post} from "@/composable/useApi.js";
 
-export async function getTasklists(pageQuery = '', filters = {}) {
+export async function getUsers(pageQuery = '', filters = {}) {
     try {
-        return await get('api/tasklists' + pageQuery, {params: filters}).then(res =>{
-            if(res.status === 200){
-                    return res.data;
-                }
-                return null
-            }
-        );
-    }catch (e) {
-        return null;
-    }
-}
-
-export async function showTasklist(id) {
-    try {
-        return await get('api/tasklists/' + id).then(res =>{
+        return await get('api/users' + pageQuery, {params: filters}).then(res =>{
                 if(res.status === 200){
                     return res.data;
                 }
@@ -28,9 +14,23 @@ export async function showTasklist(id) {
     }
 }
 
-export async function storeTasklist(form) {
+export async function showUser(id) {
     try {
-        return await post('api/tasklists', form).then(res =>{
+        return await get('api/users/' + id).then(res =>{
+                if(res.status === 200){
+                    return res.data;
+                }
+                return null
+            }
+        );
+    }catch (e) {
+        return null;
+    }
+}
+
+export async function storeUser(form) {
+    try {
+        return await post('api/users', form).then(res =>{
                 if(res.status === 201){
                     return res.data;
                 }
@@ -43,9 +43,9 @@ export async function storeTasklist(form) {
 }
 
 
-export async function updateTasklist(form, id) {
+export async function updateUser(form, id) {
     try {
-        return await patch('api/tasklists/' + id, form).then(res =>{
+        return await patch('api/users/' + id, form).then(res =>{
                 if(res.status === 200){
                     return res.data;
                 }
@@ -57,9 +57,9 @@ export async function updateTasklist(form, id) {
     }
 }
 
-export async function deleteTasklist(id) {
+export async function deleteUser(id) {
     try {
-        return await destroy('api/tasklists/' + id).then(res =>{
+        return await destroy('api/users/' + id).then(res =>{
                 if(res.status === 200){
                     return res;
                 }

@@ -57,7 +57,7 @@ const resetForm = () => {
     <div v-if="showModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div class="create-post-container bg-white rounded-xl shadow-2xl w-11/12 md:w-8/12 lg:w-6/12 xl:w-5/12 overflow-hidden">
         <div class="header p-6 bg-gradient-to-r from-indigo-600 to-blue-500">
-          <h2 class="text-2xl font-bold text-white text-center">Create a New Post</h2>
+          <h2 class="text-2xl font-bold text-white text-center">Create Post</h2>
         </div>
         <div class="editor p-6">
           <input
